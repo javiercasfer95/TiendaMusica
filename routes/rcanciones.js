@@ -1,4 +1,4 @@
-module.exports = function (app, swig, mongo) {
+module.exports = function (app, swig, gestorBD) {
     app.get("/canciones", function (req, res) {
         var canciones = [{
             "nombre": "Blank space",
@@ -20,24 +20,26 @@ module.exports = function (app, swig, mongo) {
     app.post("/cancion", function (req, res) {
         //res.send("Canción agregada:"+req.body.nombre +"<br> +" genero :" +req.body.genero +"<br> +" precio: "+req.body.precio);
         var cancion = {
-            nombre : req.body.nombre,
-            genero : req.body.genero,
-            precio : req.body.precio
+            nombre: req.body.nombre,
+            genero: req.body.genero,
+            precio: req.body.precio
         }
         //Ahora nos conectamos a la base de datos
-        mongo.MongoClient.connect(app.get('db'), function(err, db) {
-            if (err) {
-                res.send("Error de conexión: " + err);
+        // Conectarse
+        gestorBD.insertarCancion(cancion, function (id) {
+            if (id == null) {
+                res.send("Error al insertar ");
             } else {
-                var collection = db.collection('canciones');
-                collection.insert(cancion, function(err, result) {
-                    if (err) {
-                        res.send("Error al insertar " + err);
-                    } else {
-                        res.send("Agregada id: "+ result.ops[0]._id);
-                    }
-                    db.close();
-                });
+                if (req.files.portada != null) {
+                    var imagen = req.files.portada;
+                    imagen.mv('public/portadas/' + id + '.png', function (err) {
+                        if (err) {
+                            res.send("Error al subir la portada");
+                        } else {
+                            res.send("Agregada id: " + id);
+                        }
+                    });
+                }
             }
         });
     });

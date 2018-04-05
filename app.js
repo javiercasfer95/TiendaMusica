@@ -11,7 +11,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
 
+var fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
 app.use(express.static('public'));
+
+//FIN MODULOS
+
+
 
 //Variables
 app.set('port', 8081);
