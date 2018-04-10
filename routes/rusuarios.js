@@ -16,9 +16,12 @@ module.exports = function (app, swig, gestorBD) {
         }
         gestorBD.insertarUsuario(usuario, function (id) {
             if (id == null) {
-                res.send("Error al insertar ");
+                //res.send("Error al insertar ");
+                res.redirect("/registrarse?mensaje=Error al registrar usuario")
             } else {
-                res.send('Usuario Insertado ' + id);
+                //res.send('Usuario Insertado ' + id);
+                //res.redirect("/tienda");
+                res.redirect("/Tienda?mensaje=Nuevo usuario registrado");
             }
         });
     });
@@ -34,10 +37,15 @@ module.exports = function (app, swig, gestorBD) {
         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
             if (usuarios == null || usuarios.length == 0) {
                 req.session.usuario = null;
-                res.send("No identificado: ");
+                //res.send("No identificado: ");
+                res.redirect("/identificarse" + "?mensaje=Email o password incorrecto" + "&tipoMensaje=alert-danger ");
             } else {
                 req.session.usuario = usuarios[0].email;
-                res.send("identificado");
+                //res.send("identificado");
+
+                //Mejoramos la respuesta de la identificacion
+                res.redirect("/tienda" + "?mensaje=Bienvenido"+ "&tipoMensaje=alert-success");
+
             }
 
         });
