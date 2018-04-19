@@ -1,9 +1,10 @@
 // Módulos
 var express = require('express');
 var app = express();
+/*
 var fs = require('fs');
 var https = require('https');
-
+*/
 
 var expressSession = require('express-session');
 app.use(expressSession({secret: 'abcdefg', resave: true, saveUninitialized: true}));
@@ -122,12 +123,14 @@ app.use(function (err, req, res, next) {
     }
 });
 //lanzar el servidor
-/*app.listen(app.get('port'), function () {
+app.listen(app.get('port'), function () {
     console.log("Servidor activo");
-});*/
+});
+/*
 https.createServer({
     key: fs.readFileSync('certificates/alice.key'),
     cert: fs.readFileSync('certificates/alice.crt')
 }, app).listen(app.get('port'), function () {
     console.log("Servidor activo");
 });
+*/
